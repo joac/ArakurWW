@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TabWidget</class>
+ <widget class="QTabWidget" name="TabWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>680</width>
+    <height>491</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>TabWidget</string>
+  </property>
+  <property name="currentIndex">
+   <number>2</number>
+  </property>
+  <widget class="QWidget" name="tab_oxigeno">
+   <attribute name="title">
+    <string>Oxigeno</string>
+   </attribute>
+  </widget>
+  <widget class="QWidget" name="tab_turbiedad">
+   <attribute name="title">
+    <string>Turbiedad</string>
+   </attribute>
+  </widget>
+  <widget class="QWidget" name="tab_acumulado">
+   <attribute name="title">
+    <string>Acumulado</string>
+   </attribute>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
