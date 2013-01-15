@@ -1,0 +1,72 @@
+{% extends "bootstrap_responsive.html" %}
+
+{% block body_content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script type="text/javascript" src="{{url_for('static', filename='jquery.flot.js')}}"></script>
+<script type="text/javascript">
+  $(function () {
+  var data = [], max_points = 300;  
+  var options = { 
+    series: {shadowSize: 0},
+    yaxis: {min: 0, max: 100},
+    xaxis: { show: false, min:0, max:max_points }
+    };
+
+  var level = $.plot($("#level_graph"), [], options);
+  var oxigen = $.plot($("#oxigen_graph"), [], options);
+  var cloudiness = $.plot($("#cloudiness_graph"), [], options);
+  
+  var source = new EventSource('/stream');
+  source.onmessage = function (event) {
+     if (data.length == max_points){
+        data = data.slice(1);
+     };
+     data.push(JSON.parse(event.data));
+    var cloudiness_data = [], level_data = [], oxigen_data = [];
+    for(var i=0; i < data.length; ++i){
+        cloudiness_data.push([i, data[i].cloudiness])
+        level_data.push([i, data[i].level])
+        oxigen_data.push([i, data[i].oxigen])
+    };
+    oxigen.setData([oxigen_data]);
+    oxigen.draw();
+    cloudiness.setData([cloudiness_data]);
+    cloudiness.draw();
+    level.setData([level_data]);
+    level.draw();
+    };
+    });
+  
+</script>
+
+<div class="container">
+  <ul class="nav nav-tabs">
+    <li> 
+    <a href='/'>Dashboard</a>
+    </li>
+    
+    <li class='active'> 
+    <a href='#'>Graficos</a>
+    </li>
+    
+    <li> 
+    <a href='/admin'>Admin</a>
+    </li>
+  </ul>
+  
+  <div class="row">
+    <div class="span4">
+    <h4>Nivel en SBR</h4>
+    <div id="level_graph" style="width:300px;height:300px"></div>
+  
+    </div>
+    <div class="span4">
+    <h4>Oxigeno</h4>
+    <div id="oxigen_graph" style="width:300px;height:300px"></div>
+    </div>
+    <div class="span4">
+    <h4>Turbiedad</h4>
+    <div id="cloudiness_graph" style="width:300px;height:300px"></div>
+    </div>
+        
+{% endblock %}

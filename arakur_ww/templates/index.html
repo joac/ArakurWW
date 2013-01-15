@@ -3,7 +3,19 @@
 {% block body_content %}
 
 <div class="container">
-  <h1> Dashboard </h1>
+  <ul class="nav nav-tabs">
+    <li class='active'> 
+    <a href='#'>Dashboard</a>
+    </li>
+    
+    <li> 
+    <a href='/graficos'>Graficos</a>
+    </li>
+    
+    <li> 
+    <a href='/admin'>Admin</a>
+    </li>
+  </ul>
   <div class="row">
     <div class="span6">
       <h3 class="text-warning"> Alarmas </h3>
@@ -25,8 +37,6 @@
       
       <input type="button" class="btn btn-primary btn-block" value="Detener alarma acustica"/>
     </div>
-    
-    
     
     
     <div class="span6">
