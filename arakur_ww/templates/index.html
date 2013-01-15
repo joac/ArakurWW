@@ -1,0 +1,69 @@
+{% extends "bootstrap_responsive.html" %}
+
+{% block body_content %}
+
+<div class="container">
+  <h1> Dashboard </h1>
+  <div class="row">
+    <div class="span6">
+      <h3 class="text-warning"> Alarmas </h3>
+
+      <div id='alert_container'>
+      <div class="alert">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Error</strong> El nivel es insuficiente para iniciar un ciclo.
+      </div>
+      <div class="alert">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Error</strong> El nivel es insuficiente para iniciar un ciclo.
+      </div>
+      <div class="alert">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Error</strong> El nivel es insuficiente para iniciar un ciclo.
+      </div>
+      </div>
+      
+      <input type="button" class="btn btn-primary btn-block" value="Detener alarma acustica"/>
+    </div>
+    
+    
+    
+    
+    <div class="span6">
+      <h3> Valores Actuales </h3>
+      <h4> Nivel en SBR </h4>
+      <div class="progress progress-info progress-striped">
+        <div class="bar" style="width: 20%">20%</div>
+      </div>  
+      <h4> Oxigeno </h4>
+      <div class="progress progress-info progress-striped">
+        <div class="bar" style="width: 20%"> 27 mg/Litro</div>
+      </div>  
+      <h4> Turbiedad </h4>
+      <div class="progress progress-info progress-striped">
+        <div class="bar" style="width: 20%">42 NTU</div>
+    </div> </div>
+  </div>
+  <div class="row">
+    <div class="span6">
+      <h3> Eventos </h3>
+      <div id="event_container">
+      <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Ciclo iniciado</strong>
+      </div>
+      </div>
+    </div>
+    <div class="span6">
+      <h3> Volumen Acumulado </h3>
+      <h4> Total</h4>
+      50 m3
+      <h4> Parcial </h4>
+      22 m3
+      <input type="button" class="btn btn-primary btn-block" value="Reset Parcial"/>
+      
+    </div>
+  </div>
+</div>
+
+{% endblock %}
