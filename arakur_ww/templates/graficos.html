@@ -8,14 +8,13 @@
   var data = [], max_points = 300;  
   var options = { 
     series: {shadowSize: 0},
-    yaxis: {min: 0, max: 100},
+    yaxis: {min: 0, max: 100, ticks: 10},
     xaxis: { show: false, min:0, max:max_points }
     };
 
   var level = $.plot($("#level_graph"), [], options);
   var oxigen = $.plot($("#oxigen_graph"), [], options);
   var cloudiness = $.plot($("#cloudiness_graph"), [], options);
-  
   var source = new EventSource('/stream');
   source.onmessage = function (event) {
      if (data.length == max_points){
@@ -30,10 +29,13 @@
     };
     oxigen.setData([oxigen_data]);
     oxigen.draw();
+    oxigen.setupGrid(); 
     cloudiness.setData([cloudiness_data]);
     cloudiness.draw();
+    cloudiness.setupGrid(); 
     level.setData([level_data]);
     level.draw();
+    level.setupGrid(); 
     };
     });
   
