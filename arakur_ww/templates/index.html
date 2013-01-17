@@ -1,6 +1,33 @@
 {% extends "bootstrap_responsive.html" %}
 
 {% block body_content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script type="text/javascript">
+  $(function () {
+  var data = [], max_points = 300;  
+  var options = { 
+    series: {shadowSize: 0},
+    yaxis: {min: 0, max: 100, ticks: 10},
+    xaxis: { show: false, min:0, max:max_points }
+    };
+
+  function update_bar(name, value, postfix){
+    $("#" + name).css('width', value +"%");
+    $("#" + name).text(value + " " + postfix);
+  }
+
+
+  var source = new EventSource('/stream');
+  source.onmessage = function (event) {
+    var state = JSON.parse(event.data);
+    update_bar("turbiedad", state.cloudiness, "NTU");   
+    update_bar("nivel", state.level, "%");   
+    update_bar("oxigeno", state.oxigen, "mg/Litro");   
+  };
+
+});
+  
+</script>
 
 <div class="container">
   <ul class="nav nav-tabs">
@@ -43,15 +70,15 @@
       <h3> Valores Actuales </h3>
       <h4> Nivel en SBR </h4>
       <div class="progress progress-info progress-striped">
-        <div class="bar" style="width: 20%">20%</div>
+        <div id="nivel" class="bar" style="width: 20%">20%</div>
       </div>  
       <h4> Oxigeno </h4>
       <div class="progress progress-info progress-striped">
-        <div class="bar" style="width: 20%"> 27 mg/Litro</div>
+        <div id="oxigeno" class="bar" style="width: 20%"> 27 mg/Litro</div>
       </div>  
       <h4> Turbiedad </h4>
       <div class="progress progress-info progress-striped">
-        <div class="bar" style="width: 20%">42 NTU</div>
+        <div id="turbiedad" class="bar" style="width: 20%">42 NTU</div>
     </div> </div>
   </div>
   <div class="row">
