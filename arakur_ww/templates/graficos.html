@@ -15,6 +15,8 @@
   var level = $.plot($("#level_graph"), [], options);
   var oxigen = $.plot($("#oxigen_graph"), [], options);
   var cloudiness = $.plot($("#cloudiness_graph"), [], options);
+  
+
   var source = new EventSource('/stream');
   source.onmessage = function (event) {
      if (data.length == max_points){
@@ -35,7 +37,7 @@
     cloudiness.setupGrid(); 
     level.setData([level_data]);
     level.draw();
-    level.setupGrid(); 
+    level.setupGrid();
     };
     });
   
@@ -58,17 +60,20 @@
   
   <div class="row">
     <div class="span4">
-    <h4>Nivel en SBR</h4>
-    <div id="level_graph" style="width:300px;height:300px"></div>
-  
+      <h4>Nivel en SBR</h4>
+      <div id="level_graph" style="width:300px;height:300px"></div>
+
     </div>
     <div class="span4">
-    <h4>Oxigeno</h4>
-    <div id="oxigen_graph" style="width:300px;height:300px"></div>
+      <h4>Oxigeno</h4>
+      <div id="oxigen_graph" style="width:300px;height:300px"></div>
     </div>
     <div class="span4">
-    <h4>Turbiedad</h4>
-    <div id="cloudiness_graph" style="width:300px;height:300px"></div>
+      <h4>Turbiedad</h4>
+      <div id="cloudiness_graph" style="width:300px;height:300px"></div>
     </div>
+  </div>
+</div>
+
         
 {% endblock %}

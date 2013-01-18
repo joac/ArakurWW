@@ -23,9 +23,9 @@ def generar_onda( componentes):
                 total += math.sin(n * value)
             else:
                 total += math.cos(n * value)
-        yield int(50 + 50 * (total / len(componentes)))
+        yield 50 + (50 * (total / len(componentes)) * math.cos(0.1*n))
         n += 0.1
-        n %= 6
+        n %= 2000
 
 def event_stream():
     oxigeno = generar_onda([0.5, -0.25, 0.125])
@@ -35,7 +35,7 @@ def event_stream():
     while True:
         a = {'oxigen':oxigeno.next(), 'cloudiness': turbiedad.next(), 'level': nivel.next()}
         yield 'data: %s\n\n' % json.dumps(a)
-        time.sleep(0.1)
+        time.sleep(0.05)
 
 @app.route('/')
 def index():
