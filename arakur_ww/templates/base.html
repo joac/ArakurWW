@@ -9,15 +9,19 @@
 
 {% block body_content %}
 <div class="container">
-  <div class="row">
-  <div class="span1">
-    <img src="{{url_for('static', filename='logo.png')}}"/>
+  <div class="navbar">
+    <div class="navbar-inner">
+    <a class="brand" href="{{url_for('index')}}">
+        <img src="{{url_for('static', filename='logo.png')}}"/>
+        HMI - SBR
+      </a>
+      {% if current_user.is_authenticated() %}
+      <ul class="nav pull-right">
+        <li><a href="{{url_for('logout')}}">Salir</a></li>
+      </ul>
+      {% endif %}
+    </div>
   </div>
-  <div class="span11">
-    <h1> HMI - SBR </h1>
-  </div>
-</div>
-<hr>
 <div class="row">
     <div class="span12">
         {% for category, message in get_flashed_messages(with_categories=true) %}

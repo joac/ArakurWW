@@ -5,8 +5,9 @@ import config
 
 from flask import Flask, url_for, render_template, Response, json, jsonify, redirect, request
 from flask.ext.bootstrap import Bootstrap
-from flask.ext.login import LoginManager, login_required
+from flask.ext.login import LoginManager, login_required, login_user, logout_user
 from forms import LoginForm
+from models import User
 
 DEBUG = True
 SECRET_KEY = 'development key'
@@ -23,16 +24,27 @@ login_manager = LoginManager()
 login_manager.setup_app(app)
 login_manager.login_view = '/login'
 login_manager.login_message = u'Debe logearse para acceder'
+
 @login_manager.user_loader
 def load_user(userid):
-    #TODO implementar carga de usuario
+    #TODO arreglar esto para que loguee en serio
+    if userid == 'admin':
+        return User()
     return None
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        #login ok!
+        #FIXME arreglar para tener multiples usuarios
+        login_user(User())
         return redirect(request.args.get("next") or url_for('index'))
 
     return render_template("login.html", form=form)
