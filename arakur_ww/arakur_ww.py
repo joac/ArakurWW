@@ -1,9 +1,12 @@
 import time
 import random
 import math
+import redis
 
-from flask import Flask, url_for, render_template, Response, json
+from flask import Flask, url_for, render_template, Response, json, jsonify
 from flask.ext.bootstrap import Bootstrap
+import utils
+
 DEBUG = True
 SECRET_KEY = 'development key'
 BOOTSTRAP_JQUERY_VERSION = None
@@ -13,6 +16,10 @@ app.config.from_object(__name__)
 
 Bootstrap(app)
 
+broker = redis.StrictRedis(host='localhost', port=6379, db=0)
+
+def enviar_comando(function_name, *args, **kwargs):
+    return broker.publish('commands', utils.remote_plc_command(function_name, *args, **kwargs))
 
 def generar_onda( componentes):
     n = 1
@@ -28,14 +35,11 @@ def generar_onda( componentes):
         n %= 2000
 
 def event_stream():
-    oxigeno = generar_onda([0.5, -0.25, 0.125])
-    turbiedad = generar_onda([0.5, 0.33, -0.66])
-    nivel = generar_onda([1, -0.5])
-
-    while True:
-        a = {'oxigen':oxigeno.next(), 'cloudiness': turbiedad.next(), 'level': nivel.next()}
-        yield 'data: %s\n\n' % json.dumps(a)
-        time.sleep(0.05)
+    stream = broker.pubsub()
+    stream.subscribe('plc_state')
+    for data in stream.listen():
+        if data['type'] == 'message':
+            yield 'data: %s\n\n' % data['data']
 
 @app.route('/')
 def index():
@@ -49,6 +53,21 @@ def graficos():
 def stream():
     return Response(event_stream(), mimetype="text/event-stream")
 
+@app.route('/iniciar/<int:programa>')
+def iniciar_programa(programa):
+    if programa in xrange(1, 5):
+        enviar_comando('iniciar_programa', programa)
+
+    return "HEllooo"
+
+@app.route('/actualizar/<int:programa>', methods='POST')
+def actualizar_programa(programa):
+    return programa
+
+@app.route('/registro/<int:direccion>/<int:valor>/')
+def actualizar_registro(direccion, valor):
+    enviar_comando('_escribir_registro', direccion, valor)
+    return "enviado!"
 
 if __name__ == '__main__':
     app.run(threaded=True, host='0.0.0.0')
