@@ -67,28 +67,28 @@ niveles = {
 
 class ArakurPLC(ModbusClient):
     """Mantiene una interface de alto nivel con el PLC de operacion del SBR"""
+    def __init__(self, *args, **kwargs):
+        self.prev_marcas = []
+        super(ArakurPLC, self).__init__(*args, **kwargs)
 
     def detener_alarma(self):
         """Detiene la alarma"""
-        response = self.write_coil(M_ALARM_OFF, True)
-        return response.function_code < ERROR_CODE
+        return self._escribir_marca(M_ALARM_OFF, True)
 
     def iniciar_sbr(self):
         """Inicia el ciclo del sbr"""
-        response = self.write_coil(M_START_SBR, True)
-        return response.function_code  < ERROR_CODE
+        return self._escribir_marca(M_START_SBR, True)
 
     def detener_sbr(self):
         """Detiene el ciclo sbr"""
-        response = self.write_coil(M_STOP_SBR, True)
-        return response.function_code  < ERROR_CODE
+        return self._escribir_marca(M_STOP_SBR, True)
 
     def reset_acumulado(self):
         """Regresa la cuenta de volumen tratado a 0"""
-        response = self.write_coil(M_RESET_VOL, True)
-        return response.function_code  < ERROR_CODE
+        return self._escribir_marca(M_RESET_VOL, True)
 
     def obtener_estado(self):
+
         marcas = self.leer_marcas()
         registros = self.leer_registros()
         #manejar la logica de novedades
@@ -97,19 +97,28 @@ class ArakurPLC(ModbusClient):
         self._procesar_eventos(state, marcas)
         self._procesar_valores_instantaneos(state, registros)
         self._procesar_programas(state, registros)
+        #faltaria timestamp para la informacion
+        #guardamos las marcas viejas, para poder ver si cambiaron
+        self.prev_marcas = marcas
         return state
 
     def _procesar_alarmas(self, state, marcas):
         state['alarms'] = []
+        state['new_alarms'] = []
         for alarma, registro in alarms.iteritems():
             if marcas[registro]:
                 state['alarms'].append(alarma)
+            if marcas[registro] and not self.prev_marcas[registro]:
+                state['new_alarms'].append(alarma)
 
     def _procesar_eventos(self, state, marcas):
         state['events'] = []
+        state['new_events'] = []
         for evt, registro in notificaciones.iteritems():
             if marcas[registro]:
                 state['events'].append(evt)
+            if marcas[registro] and not self.prev_marcas[registro]:
+                state['new_events'].append(evt)
 
     def _procesar_valores_instantaneos(self, state, registros):
         state['instant_values'] = {}
@@ -170,6 +179,10 @@ class ArakurPLC(ModbusClient):
 
     def _escribir_registro(self, numero, valor):
         response = self.write_register(numero, valor)
+        return response.function_code  < ERROR_CODE
+
+    def _escribir_marca(self, numero, valor):
+        response = self.write_coil(numero, valor)
         return response.function_code  < ERROR_CODE
 
     def iniciar_programa(self, programa):

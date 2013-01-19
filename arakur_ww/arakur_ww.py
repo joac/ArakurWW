@@ -69,5 +69,11 @@ def actualizar_registro(direccion, valor):
     enviar_comando('_escribir_registro', direccion, valor)
     return "enviado!"
 
+@app.route('/marca/<int:direccion>/<int:valor>/')
+def actualizar_marca(direccion, valor):
+    valor = valor > 0
+    enviar_comando('_escribir_marca', direccion, valor)
+    return "enviado!"
+
 if __name__ == '__main__':
     app.run(threaded=True, host='0.0.0.0')
