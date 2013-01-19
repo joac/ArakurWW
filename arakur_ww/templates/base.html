@@ -8,9 +8,42 @@
 {% endblock %}
 {% block body_content %}
 <div class="container">
-<h1> HMI - SBR </h1>
+  <div class="row">
+  <div class="span1">
+    <img src="{{url_for('static', filename='logo.png')}}"/>
+  </div>
+  <div class="span11">
+    <h1> HMI - SBR </h1>
+  </div>
+</div>
+<hr>
 {% block content%}
 {% endblock %}
+ <hr>
+ <div class="row">
+   <div class="span4 centered">
+     <a href="http://flask.pocoo.org/"><img
+       src="{{url_for('static', filename='flask-logo.png')}}"
+       border="0"
+       alt="powered by Flask"
+       title="powered by Flask"></a>
+
+   </div>
+    <div class="span4 centered">
+     <a href="http://python.org/"><img
+       src="{{url_for('static', filename='logo-python.png')}}"
+       border="0"
+       alt="powered by Python"
+       title="powered by Python"></a>
+   </div>
+    <div class="span4 centered">
+     <a href="http://www.gnu.org/licenses/gpl.html"><img
+       src="{{url_for('static', filename='gpl-logo.png')}}"
+       border="0"
+       alt="GPLv3 Software"
+       title="GPLv3 Software"></a>
+   </div>
+</div>
 </div>
 
 {% endblock %}
