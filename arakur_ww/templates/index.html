@@ -1,5 +1,10 @@
 {% extends "bootstrap_responsive.html" %}
 
+{% block style %}
+<link href="{{url_for('static', filename='bootstrap.min.css')}}" rel="stylesheet">
+<link href="{{url_for('static', filename='base.css')}}" rel="stylesheet">
+{% endblock %}
+
 {% block body_content %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 <script src="{{url_for('static', filename='event_manager.js')}}"></script>
@@ -63,13 +68,25 @@
       <div class="progress progress-info progress-striped">
         <div id="turbiedad" class="bar" style="width: 20%">42 NTU</div>
     </div> </div>
-    <div class="span6">
+    <div class="span3">
       <h3> Volumen Acumulado </h3>
       <h4> Total</h4>
       50 m3
       <h4> Parcial </h4>
       22 m3
       <input type="button" class="btn btn-primary btn-block" value="Reset Parcial"/>
+    </div>
+    <div class="span3">
+        <h3> Tiempos </h3>
+        <h4> Carga Aireada </h4>
+        <div id="tiempo_carga_aireada">50 minutos</div>
+        <h4> Aireación </h4>
+        <div id="tiempo_aireacion">50 minutos</div>
+        <h4> Sedimentación </h4>
+        <div id="tiempo_sedimentacion">50 minutos</div>
+        <h4> Descarga </h4>
+        <div id="tiempo_descarga">50 minutos</div>
+
     </div>
   </div>
   <div class="row">
