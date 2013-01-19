@@ -1,0 +1,17 @@
+{% extends "bootstrap_responsive.html" %}
+
+{% block style %}
+<link href="{{url_for('static', filename='bootstrap.min.css')}}" rel="stylesheet">
+<link href="{{url_for('static', filename='base.css')}}" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="{{url_for('static', filename='event_manager.js')}}"></script>
+{% endblock %}
+{% block body_content %}
+<div class="container">
+<h1> HMI - SBR </h1>
+{% block content%}
+{% endblock %}
+</div>
+
+{% endblock %}
+

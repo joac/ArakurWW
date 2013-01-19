@@ -1,7 +1,6 @@
-{% extends "bootstrap_responsive.html" %}
+{% extends "base.html" %}
 
-{% block body_content %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+{% block content %}
 <script type="text/javascript" src="{{url_for('static', filename='jquery.flot.js')}}"></script>
 <script type="text/javascript">
   $(function () {
@@ -47,7 +46,6 @@
   
 </script>
 
-<div class="container">
   <ul class="nav nav-tabs">
     <li> 
     <a href='/'>Dashboard</a>
@@ -77,7 +75,4 @@
       <div id="cloudiness_graph" style="width:300px;height:300px"></div>
     </div>
   </div>
-</div>
-
-        
 {% endblock %}
