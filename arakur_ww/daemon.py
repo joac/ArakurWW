@@ -1,33 +1,32 @@
-from threading import Thread
 import time
 import json
 import redis
 import utils
-
+from config import PLC, REDIS
 from plc_interface import ArakurPLC
+import threading
 
-plc = ArakurPLC('localhost', port=5020)
+plc = ArakurPLC(PLC['host'], port=PLC['port'])
 plc.connect()
 
-broker = redis.StrictRedis(host='localhost', port=6379, db=0)
+broker = redis.StrictRedis(**REDIS)
 
-class DataAdquisitor(Thread):
+class DataAdquisitor(threading.Thread):
     def run(self):
         while True:
-            #state = {}
-            #state['marcas'] = plc.leer_marcas()
-            #state['registros'] = plc.leer_registros()
-            state = plc.obtener_estado()
+            #TODO logica para tratar de que el tiempo del ciclo sea constante
+            #TODO guardar en la DB registros historicos
+            #TODO agregar logging
 
+            state = plc.obtener_estado()
             broker.publish('plc_state', json.dumps(state))
             time.sleep(1)
 
-class CommandWatcher(Thread):
+class CommandWatcher(threading.Thread):
     def run(self):
-        print "corriendo test"
+        #TODO implementar logging
         pubsub = broker.pubsub()
         pubsub.subscribe('commands')
-        print pubsub
         for message in pubsub.listen():
             if message['type'] == 'message':
                 print message['data']
@@ -35,6 +34,11 @@ class CommandWatcher(Thread):
 
 if __name__ == '__main__':
     da = DataAdquisitor()
+    da.daemon = True
     da.start()
     cw = CommandWatcher()
+    cw.daemon = True
     cw.start()
+
+    while threading.active_count() > 0:
+        time.sleep(0.1)

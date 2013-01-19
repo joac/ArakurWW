@@ -1,5 +1,6 @@
 import redis
 import utils
+import config
 
 from flask import Flask, url_for, render_template, Response, json, jsonify
 from flask.ext.bootstrap import Bootstrap
@@ -13,7 +14,7 @@ app.config.from_object(__name__)
 
 Bootstrap(app)
 
-broker = redis.StrictRedis(host='localhost', port=6379, db=0)
+broker = redis.StrictRedis(**config.REDIS)
 
 def enviar_comando(function_name, *args, **kwargs):
     return broker.publish('commands', utils.remote_plc_command(function_name, *args, **kwargs))
