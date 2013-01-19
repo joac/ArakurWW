@@ -19,15 +19,19 @@
 
   var source = new EventSource('/stream');
   source.onmessage = function (event) {
-     if (data.length == max_points){
+    if (data.length == max_points){
         data = data.slice(1);
-     };
-     data.push(JSON.parse(event.data));
+    };
+    var state = JSON.parse(event.data);
+    console.log(state);       
+    data.push(state.instant_values);
+
     var cloudiness_data = [], level_data = [], oxigen_data = [];
     for(var i=0; i < data.length; ++i){
-        cloudiness_data.push([i, data[i].cloudiness])
-        level_data.push([i, data[i].level])
-        oxigen_data.push([i, data[i].oxigen])
+      var instant_data = data[i];
+        cloudiness_data.push([i, instant_data.cloudiness])
+        level_data.push([i, instant_data.level])
+        oxigen_data.push([i, instant_data.oxigen])
     };
     oxigen.setData([oxigen_data]);
     oxigen.draw();

@@ -20,9 +20,10 @@
   var source = new EventSource('/stream');
   source.onmessage = function (event) {
     var state = JSON.parse(event.data);
-    update_bar("turbiedad", state.cloudiness, "NTU");   
-    update_bar("nivel", state.level, "%");   
-    update_bar("oxigeno", state.oxigen, "mg/Litro");   
+    console.log(state);
+    update_bar("turbiedad", state.instant_values.cloudiness, "NTU");   
+    update_bar("nivel", state.instant_values.level, "%");   
+    update_bar("oxigeno", state.instant_values.oxigen, "mg/Litro");   
   };
 
 });
