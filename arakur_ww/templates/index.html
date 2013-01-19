@@ -2,32 +2,35 @@
 
 {% block body_content %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="{{url_for('static', filename='event_manager.js')}}"></script>
 <script type="text/javascript">
-  $(function () {
-  var data = [], max_points = 300;  
-  var options = { 
-    series: {shadowSize: 0},
-    yaxis: {min: 0, max: 100, ticks: 10},
-    xaxis: { show: false, min:0, max:max_points }
+(function(){  
+    first_load = true;  
+
+    function update(state){
+        update_bar("turbiedad", state.instant_values.cloudiness, "NTU");   
+        update_bar("nivel", state.instant_values.level, "%");   
+        update_bar("oxigeno", state.instant_values.oxigen, "mg/Litro");
+        if (first_load){
+            for(var i = 0; i < state.alarms.length; i++){
+                set_alert(state.alarms[i]);                
+                };
+            for(var i = 0; i < state.events.length; i++){
+                set_notify(state.events[i]);                
+                };
+            first_load = false;
+        } else {
+            for(var i = 0; i < state.new_alarms.length; i++){
+                set_alert(state.new_alarms[i]);                
+            }; 
+            for(var i = 0; i < state.new_events.length; i++){
+                set_notify(state.new_events[i]);                
+            };
+}; 
     };
+    state_handler(update);
+})();
 
-  function update_bar(name, value, postfix){
-    $("#" + name).css('width', value +"%");
-    $("#" + name).text(value + " " + postfix);
-  }
-
-
-  var source = new EventSource('/stream');
-  source.onmessage = function (event) {
-    var state = JSON.parse(event.data);
-    console.log(state);
-    update_bar("turbiedad", state.instant_values.cloudiness, "NTU");   
-    update_bar("nivel", state.instant_values.level, "%");   
-    update_bar("oxigeno", state.instant_values.oxigen, "mg/Litro");   
-  };
-
-});
-  
 </script>
 
 <div class="container">
@@ -35,38 +38,17 @@
     <li class='active'> 
     <a href='#'>Dashboard</a>
     </li>
-    
+
     <li> 
     <a href='/graficos'>Graficos</a>
     </li>
-    
+
     <li> 
     <a href='/admin'>Admin</a>
     </li>
   </ul>
+  
   <div class="row">
-    <div class="span6">
-      <h3 class="text-warning"> Alarmas </h3>
-
-      <div id='alert_container'>
-      <div class="alert">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>Error</strong> El nivel es insuficiente para iniciar un ciclo.
-      </div>
-      <div class="alert">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>Error</strong> El nivel es insuficiente para iniciar un ciclo.
-      </div>
-      <div class="alert">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>Error</strong> El nivel es insuficiente para iniciar un ciclo.
-      </div>
-      </div>
-      
-      <input type="button" class="btn btn-primary btn-block" value="Detener alarma acustica"/>
-    </div>
-    
-    
     <div class="span6">
       <h3> Valores Actuales </h3>
       <h4> Nivel en SBR </h4>
@@ -81,17 +63,6 @@
       <div class="progress progress-info progress-striped">
         <div id="turbiedad" class="bar" style="width: 20%">42 NTU</div>
     </div> </div>
-  </div>
-  <div class="row">
-    <div class="span6">
-      <h3> Eventos </h3>
-      <div id="event_container">
-      <div class="alert alert-success">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>Ciclo iniciado</strong>
-      </div>
-      </div>
-    </div>
     <div class="span6">
       <h3> Volumen Acumulado </h3>
       <h4> Total</h4>
@@ -99,7 +70,19 @@
       <h4> Parcial </h4>
       22 m3
       <input type="button" class="btn btn-primary btn-block" value="Reset Parcial"/>
-      
+    </div>
+  </div>
+  <div class="row">
+    <div class="span6">
+      <h3> Alarmas </h3>
+      <input type="button" class="btn btn-primary btn-block" value="Detener alarma acustica"/>
+      <div id='alert_container'>
+      </div>
+    </div>
+    <div class="span6">
+      <h3> Eventos </h3>
+      <div id="event_container" height="50%" style="overflow: auto;">
+      </div>
     </div>
   </div>
 </div>
