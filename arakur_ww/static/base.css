@@ -24,3 +24,8 @@ body {
  background-color: rgba(69, 174, 234, 0.5);
  background-image: none;
 }
+
+.navbar .nav > li > a:focus, .navbar .nav > li > a:hover {
+ background-color: rgba(22, 132, 194, 0.5);
+    
+}
