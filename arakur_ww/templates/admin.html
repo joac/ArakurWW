@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+
+<ul class="nav nav-tabs">
+  <li> 
+  <a href='{{url_for('index')}}'>Dashboard</a>
+  </li>
+
+  <li> 
+  <a href='{{url_for('graficos')}}'>Graficos</a>
+  </li>
+
+  <li class='active'> 
+  <a href='#'>Admin</a>
+  </li>
+</ul>
+
+<div class="row">
+  {% for n in [1, 2, 3] %}
+    <div class="span4">
+      <h4> Programa {{n}} </h4>
+      <dl>
+          <dt>Carga aireada:</dt>
+          <dd id="carga_aireada_{{n}}">{{programas[n]['carga_aireada']}} Minutos</dd>
+          <dt>Aireación:</dt>
+          <dd>{{programas[n]['aireacion']}} Minutos</dd>
+          <dt>Sedimentación:</dt>
+          <dd>{{programas[n]['sedimentacion']}} Minutos</dd>
+          <dt>Descarga:</dt>
+          <dd>{{programas[n]['descarga']}} Minutos</dd>
+          <a href="{{url_for('actualizar_programa', programa=n)}}"
+            class='btn btn-primary'>Editar</a>
+      </dl>
+    </div> 
+  {% endfor %}
+</div>
+
+{% endblock %}

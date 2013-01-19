@@ -48,49 +48,62 @@
   
   <div class="row">
     <div class="span6">
-      <h3> Valores Actuales </h3>
-      <h4> Nivel en SBR </h4>
-      <div class="progress progress-info progress-striped">
-        <div id="nivel" class="bar" style="width: 20%">20%</div>
-      </div>  
-      <h4> Oxigeno </h4>
-      <div class="progress progress-info progress-striped">
-        <div id="oxigeno" class="bar" style="width: 20%"> 27 mg/Litro</div>
-      </div>  
-      <h4> Turbiedad </h4>
-      <div class="progress progress-info progress-striped">
-        <div id="turbiedad" class="bar" style="width: 20%">42 NTU</div>
-    </div> </div>
+      <h4> Valores Actuales </h4>
+      <dl>
+        <dt>Nivel en SBR</dt>
+        <dd>
+        <div class="progress progress-info progress-striped">
+          <div id="nivel" class="bar" style="width: 20%">20%</div>
+        </div>
+        </dd>
+
+        <dt> Oxígeno </dt>
+        <dd>
+        <div class="progress progress-info progress-striped">
+          <div id="oxigeno" class="bar" style="width: 20%"> 27 mg/Litro</div>
+        </div> 
+        </dd> 
+        <dt> Turbiedad </dt>
+        <dd>
+        <div class="progress progress-info progress-striped">
+          <div id="turbiedad" class="bar" style="width: 20%">42 NTU</div>
+        </div>
+        </dd> 
+      </dl>
+    </div>
     <div class="span3">
-      <h3> Volumen Acumulado </h3>
-      <h4> Total</h4>
-      50 m3
-      <h4> Parcial </h4>
-      22 m3
+      <h4> Volumen Acumulado </h4>
+      <dl>
+        <dt> Total</dt>
+        <dd>50 m3</dd>
+        <dt> Parcial </dt>
+        <dd>22 m3</dd>
+      </dl>
       <input type="button" class="btn btn-primary btn-block" value="Reset Parcial"/>
     </div>
     <div class="span3">
-        <h3> Tiempos </h3>
-        <h4> Carga Aireada </h4>
-        <div id="tiempo_carga_aireada">50 minutos</div>
-        <h4> Aireación </h4>
-        <div id="tiempo_aireacion">50 minutos</div>
-        <h4> Sedimentación </h4>
-        <div id="tiempo_sedimentacion">50 minutos</div>
-        <h4> Descarga </h4>
-        <div id="tiempo_descarga">50 minutos</div>
-
+        <h4> Progreso </h4>
+        <dl>
+        <dt> Carga Aireada </dt>
+        <dd id="tiempo_carga_aireada">50 minutos</dd>
+        <dt> Aireación </dt>
+        <dd id="tiempo_aireacion">50 minutos</dd>
+        <dt> Sedimentación </dt>
+        <dd id="tiempo_sedimentacion">50 minutos</dd>
+        <dt> Descarga </dt>
+        <dd id="tiempo_descarga">50 minutos</dd>
+      </dl>
     </div>
   </div>
   <div class="row">
     <div class="span6">
-      <h3> Alarmas </h3>
+      <h4> Alarmas </h4>
       <input type="button" class="btn btn-primary btn-block" value="Detener alarma acustica"/>
       <div id='alert_container'>
       </div>
     </div>
     <div class="span6">
-      <h3> Eventos </h3>
+      <h4> Eventos </h4>
       <div id="event_container" height="50%" style="overflow: auto;">
       </div>
     </div>

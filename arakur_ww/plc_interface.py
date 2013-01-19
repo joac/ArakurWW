@@ -5,7 +5,7 @@ from constants import *
 class ArakurPLC(ModbusClient):
     """Mantiene una interface de alto nivel con el PLC de operacion del SBR"""
     def __init__(self, *args, **kwargs):
-        self.prev_marcas = []
+        self.prev_marcas = [False] * MARK_COUNT
         super(ArakurPLC, self).__init__(*args, **kwargs)
 
     def detener_alarma(self):
@@ -25,10 +25,8 @@ class ArakurPLC(ModbusClient):
         return self._escribir_marca(M_RESET_VOL, True)
 
     def obtener_estado(self):
-
         marcas = self.leer_marcas()
         registros = self.leer_registros()
-        #manejar la logica de novedades
         state = {}
         self._procesar_alarmas(state, marcas)
         self._procesar_eventos(state, marcas)
@@ -65,7 +63,7 @@ class ArakurPLC(ModbusClient):
     def _procesar_programas(self, state, registros):
         state['programs'] = []
         values =  ['carga_aireada', 'aireacion', 'sedimentacion', 'descarga']
-        for n in xrange(0, 4):
+        for n in xrange(0, 3):
             program = {}
             for i, key in enumerate(values):
                 registro = PROGRAM_POINTER + 4 * n + i
@@ -92,7 +90,7 @@ class ArakurPLC(ModbusClient):
 
     def actualizar_programa(self, numero, carga_aireada, aireacion, sedimentacion, descarga):
         """Actualiza la configuracion para el programa dado."""
-        if numero in xrange(1, 5):
+        if numero in xrange(1, 4):
             direccion = PROGRAM_POINTER + (numero - 1) * 4 #Aritmetica para escribir el programa
 
             response = self.write_registers(direccion, [carga_aireada, aireacion, sedimentacion, descarga])
@@ -103,17 +101,9 @@ class ArakurPLC(ModbusClient):
     def cambiar_programa(self, valor):
         return self._escribir_registro(ACTUAL_PROGRAM, valor)
 
-
-    def configurar_volumen_maximo(self, valor):
-        return self._escribir_registro(MAX_VOL_SBR, valor)
-
-
     def actualizar_niveles(self, min_oxigeno, max_oxigeno, max_turbiedad):
-
         response = self.write_registers(OXIGEN_MIN, [min_oxigeno, max_oxigeno, max_turbiedad])
-
         return response.function_code < ERROR_CODE
-
 
     def _escribir_registro(self, numero, valor):
         response = self.write_register(numero, valor)

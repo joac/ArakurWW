@@ -1,4 +1,5 @@
-from flask.ext.wtf import Form, TextField, PasswordField, validators
+#! -*- coding: utf8 -*-
+from flask.ext.wtf import Form, TextField, PasswordField, validators, HiddenField, IntegerField
 
 
 class LoginForm(Form):
@@ -20,7 +21,23 @@ class LoginForm(Form):
         return True
 
 
-
+class ProgramForm(Form):
+    carga_aireada = IntegerField(u'Carga Aireada', [
+        validators.Required("Campo obligatorio"),
+        validators.NumberRange(1, 9999, "El valor debe estar entre %(min)s y %(max)s"),
+        ])
+    aireacion = IntegerField(u'Aireación', [
+        validators.Required("Campo obligatorio"),
+        validators.NumberRange(1, 9999, "El valor debe estar entre %(min)s y %(max)s"),
+        ])
+    sedimentacion = IntegerField(u'Sedimentación', [
+        validators.Required("Campo obligatorio"),
+        validators.NumberRange(1, 9999, "El valor debe estar entre %(min)s y %(max)s"),
+        ])
+    descarga = IntegerField(u'Descarga', [
+        validators.Required("Campo obligatorio"),
+        validators.NumberRange(1, 9999, "El valor debe estar entre %(min)s y %(max)s"),
+        ])
 
 
 

@@ -21,6 +21,15 @@ def execute_command(instance, message):
     c = json.loads(message)
     return getattr(instance, c['name'])(*c['args'], **c['kwargs'])
 
+def programas_validos():
+    """devuelve una lista de programas validos"""
+    return [1, 2, 3]
+
+def programa_valido(programa):
+    """devuelve un booleano para saber si es un numero válido de programa"""
+    return programa in programas_validos()
+
+
 def generar_onda(componentes):
     """Generador por sintesis para generar ondas complejas"""
     n = 1

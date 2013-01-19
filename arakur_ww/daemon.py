@@ -19,8 +19,13 @@ class DataAdquisitor(threading.Thread):
             #TODO agregar logging
 
             state = plc.obtener_estado()
+            #guardamos en una key programa_<n> el hash del programa
+            #TODO actualizar solo si hay novedades
+            for n, programa in enumerate(state['programs'], 1):
+                broker.hmset('programa_%s' % n, programa)
+
             broker.publish('plc_state', json.dumps(state))
-            time.sleep(1)
+            time.sleep(0.5)
 
 class CommandWatcher(threading.Thread):
     def run(self):

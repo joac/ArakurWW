@@ -3,10 +3,10 @@ import redis
 import utils
 import config
 
-from flask import Flask, url_for, render_template, Response, json, jsonify, redirect, request
+from flask import Flask, url_for, render_template, Response, json, jsonify, redirect, request, flash
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.login import LoginManager, login_required, login_user, logout_user
-from forms import LoginForm
+from forms import LoginForm, ProgramForm
 from models import User
 
 DEBUG = True
@@ -23,7 +23,7 @@ broker = redis.StrictRedis(**config.REDIS)
 login_manager = LoginManager()
 login_manager.setup_app(app)
 login_manager.login_view = '/login'
-login_manager.login_message = u'Debe logearse para acceder'
+login_manager.login_message = u'Debe logearse para poder acceder'
 
 @login_manager.user_loader
 def load_user(userid):
@@ -76,17 +76,43 @@ def graficos():
 def stream():
     return Response(event_stream(), mimetype="text/event-stream")
 
+
+@app.route('/admin')
+def admin():
+    programas = {}
+    for n in utils.programas_validos():
+        key = "programa_%d" % n
+        programas[n] = broker.hgetall(key)
+
+    return render_template('admin.html', programas=programas)
+
 @app.route('/iniciar/<int:programa>')
 @login_required
 def iniciar_programa(programa):
-    if programa in xrange(1, 5):
+    if utils.programa_valido(programa):
         enviar_comando('iniciar_programa', programa)
     return "enviado!"
 
-@app.route('/actualizar/<int:programa>', methods='POST')
+@app.route('/programa/<int:programa>', methods=['GET', 'POST'])
 @login_required
 def actualizar_programa(programa):
-    return programa
+
+    if not utils.programa_valido(programa):
+        flash(u"El numero de programa %d es invalido" % programa, 'error')
+        redirect(url_for('admin'))
+
+    form = ProgramForm()
+    if form.validate_on_submit():
+        enviar_comando('actualizar_programa',
+                programa,
+                form.carga_aireada.data,
+                form.aireacion.data,
+                form.sedimentacion.data,
+                form.descarga.data,
+                )
+        flash(u'Programa Nº%d Actualizado!' % programa, 'success')
+        return redirect(url_for('admin'))
+    return render_template('programa.html', form=form, programa=programa)
 
 
 #Debug methods, para poder escribir registro y marcas aleatorias del plc

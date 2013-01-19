@@ -12,7 +12,6 @@ REGISTER_COUNT = 33
 ACTUAL_PROGRAM = 8
 PROGRAM_POINTER = 9 #Registro incial para escribir programas
 
-MAX_VOL_SBR = 28
 
 OXIGEN_MIN = 5
 OXIGEN_MAX = 6
@@ -42,6 +41,7 @@ alarms = {
         'Fallo bomba recirculadora': 19,
         'Oxigeno disuelto fuera de rango': 20,
         'Turbiedad fuera de rango': 21,
+        'Fallo válvula de recirculación': 22,
         }
 
 notificaciones = {
@@ -62,7 +62,8 @@ niveles = {
         'oxigen_max' : OXIGEN_MAX,
         'cloudiness_max' : CLOUDINESS_MAX,
         'programa_actual' : ACTUAL_PROGRAM,
-        'volumen_sbr': MAX_VOL_SBR,
+        'carga_aireada' : 21,
+        'aireacion' : 22,
+        'sedimentacion' : 23,
+        'descarga' : 24,
     }
-
-
