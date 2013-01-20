@@ -119,14 +119,17 @@ def actualizar_programa(programa):
 
     form = ProgramForm()
     if form.validate_on_submit():
-        enviar_comando('actualizar_programa',
+        ret = enviar_comando('actualizar_programa',
                 programa,
                 form.carga_aireada.data,
                 form.aireacion.data,
                 form.sedimentacion.data,
                 form.descarga.data,
                 )
-        flash(u'Programa Nº%d Actualizado!' % programa, 'success')
+        if ret:
+            flash(u'Programa Nº%d Actualizado!' % programa, 'success')
+        else:
+            flash(u'Ocurrió un error al actualizar el programa nº%d' % programa, 'error')
         return redirect(url_for('admin'))
     return render_template('programa.html', form=form, programa=programa)
 
