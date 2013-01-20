@@ -2,6 +2,7 @@ import time
 import json
 import redis
 import utils
+from utils import RemoteCommand
 from config import PLC, REDIS
 from plc_interface import ArakurPLC
 import threading
@@ -35,7 +36,13 @@ class CommandWatcher(threading.Thread):
         for message in pubsub.listen():
             if message['type'] == 'message':
                 print message['data']
-                utils.execute_command(plc, message['data'])
+                command = RemoteCommand()
+                command.unserialize(message['data'])
+                success = command.execute(plc)
+                response = {'id':command.id, 'success': success}
+                print response
+                time.sleep(0.6)
+                broker.publish('command-returns', json.dumps(response))
 
 if __name__ == '__main__':
     da = DataAdquisitor()

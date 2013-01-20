@@ -2,24 +2,43 @@
 
 import json
 import math
+import uuid
 
-def remote_plc_command(function_name, *args, **kwargs):
-    """Convierte los argumentos en un JSON, para poder llamar una
-    funcion remotamente usando pubsub de Redis"""
 
-    data = {
-            'name': function_name,
-            'args': args,
-            'kwargs' : kwargs,
+class RemoteCommand(object):
+
+    def __init__(self, function_name=None, *args, **kwargs):
+        if function_name:
+            self.id = str(uuid.uuid4())
+            self.function_name = function_name
+            self.args = args
+            self.kwargs = kwargs
+
+    def to_dict(self):
+        data_dict = {
+                'id': self.id,
+                'function_name' : self.function_name,
+                'args' : self.args,
+                'kwargs': self.kwargs,
             }
-    return json.dumps(data)
+        return data_dict
 
-def execute_command(instance, message):
-    """Ejecuta un metodo de instance, a partir de un json generado
-    con remote_plc_command"""
+    def serialize(self):
+        """Convierte los parametros a un string JSON"""
+        return json.dumps(self.to_dict())
 
-    c = json.loads(message)
-    return getattr(instance, c['name'])(*c['args'], **c['kwargs'])
+    def unserialize(self, data):
+        """Popula los campos del objeto, con el string JSON provisto"""
+        data_dict = json.loads(data)
+        self.id = data_dict['id']
+        self.function_name = data_dict['function_name']
+        self.args = data_dict['args']
+        self.kwargs = data_dict['kwargs']
+
+    def execute(self, instance):
+        """ejecuta el commando en la instancia dada"""
+        f = getattr(instance, self.function_name)
+        return f(*self.args, **self.kwargs)
 
 def programas_validos():
     """devuelve una lista de programas validos"""

@@ -2,6 +2,7 @@
 import redis
 import utils
 import config
+from utils import RemoteCommand
 
 from flask import Flask, url_for, render_template, Response, json, jsonify, redirect, request, flash
 from flask.ext.bootstrap import Bootstrap
@@ -51,7 +52,22 @@ def login():
 
 
 def enviar_comando(function_name, *args, **kwargs):
-    return broker.publish('commands', utils.remote_plc_command(function_name, *args, **kwargs))
+    """Envia un comando remoto al servidor del plc"""
+    stream = broker.pubsub()
+    stream.subscribe('command-returns')
+
+    command = RemoteCommand(function_name, *args, **kwargs)
+    receptor = broker.publish('commands', command.serialize())
+
+    if receptor:
+        for message in stream.listen():
+            if message['type'] == 'message':
+                data = json.loads(message['data'])
+                print data
+                if data['id'] == command.id:
+                    return data['success']
+
+    return False
 
 
 def event_stream():
