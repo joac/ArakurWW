@@ -3,46 +3,47 @@
 {% block content %}
 <script type="text/javascript" src="{{url_for('static', filename='jquery.flot.js')}}"></script>
 <script type="text/javascript">
-  $(function () {
-  var data = [], max_points = 300;  
-  var options = { 
-    series: {shadowSize: 0},
-    yaxis: {min: 0, max: 100, ticks: 10},
-    xaxis: { show: false, min:0, max:max_points }
+  $(document).ready(function () {
+    function volume_formater(v, axis){
+        return v.toFixed(axis.tickDecimals) + "m³";
+    };
+    function oxigen_formater(v, axis){
+        return v.toFixed(axis.tickDecimals) + "mg/l";
+    };
+    function cloudiness_formater(v, axis){
+        return v.toFixed(axis.tickDecimals) + "NTU";
     };
 
-  var level = $.plot($("#level_graph"), [], options);
-  var oxigen = $.plot($("#oxigen_graph"), [], options);
-  var cloudiness = $.plot($("#cloudiness_graph"), [], options);
+
+    var options = { 
+        series: {shadowSize: 0},
+        xaxes: [{mode: 'time'}],
+        yaxes: [
+            {min: 0, ticks: 10, tickFormatter: volume_formater},
+            {min: 0, ticks: 10, tickFormatter: oxigen_formater},
+            {min: 0, ticks: 10, tickFormatter: cloudiness_formater,}, 
+        ]
+    };
+    var a = [];
+    var b = [];
+    var c = [];
+    var start = Date.now()
+    for(var n=0; n < 52560; n++){
+        var time = start + n * 1000 * 60 * 10;
+        a.push([time, n])
+        b.push([time, n/1000 + Math.cos(n/200)])
+        c.push([time, n/10000 + 20 * Math.cos(n/100)])
+    };
+    
+    var combined_graph = $.plot($("#graph"), [
+      {data: a, label:"Nivel"}, 
+      {data: b, label:'Oxigeno', yaxis: 2},
+      {data: c, label:'Turbiedad', yaxis: 3},
+      
+      ], options);
   
 
-  var source = new EventSource('/stream');
-  source.onmessage = function (event) {
-    if (data.length == max_points){
-        data = data.slice(1);
-    };
-    var state = JSON.parse(event.data);
-    console.log(state);       
-    data.push(state.instant_values);
-
-    var cloudiness_data = [], level_data = [], oxigen_data = [];
-    for(var i=0; i < data.length; ++i){
-      var instant_data = data[i];
-        cloudiness_data.push([i, instant_data.cloudiness])
-        level_data.push([i, instant_data.level])
-        oxigen_data.push([i, instant_data.oxigen])
-    };
-    oxigen.setData([oxigen_data]);
-    oxigen.draw();
-    oxigen.setupGrid(); 
-    cloudiness.setData([cloudiness_data]);
-    cloudiness.draw();
-    cloudiness.setupGrid(); 
-    level.setData([level_data]);
-    level.draw();
-    level.setupGrid();
-    };
-    });
+});
   
 </script>
 
@@ -61,18 +62,8 @@
   </ul>
   
   <div class="row">
-    <div class="span4">
-      <h4>Nivel en SBR</h4>
-      <div id="level_graph" style="width:300px;height:300px"></div>
-
-    </div>
-    <div class="span4">
-      <h4>Oxigeno</h4>
-      <div id="oxigen_graph" style="width:300px;height:300px"></div>
-    </div>
-    <div class="span4">
-      <h4>Turbiedad</h4>
-      <div id="cloudiness_graph" style="width:300px;height:300px"></div>
+    <div class="span12">
+      <div id="graph" style="width:100%;height:400px"></div>
     </div>
   </div>
 {% endblock %}
