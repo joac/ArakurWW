@@ -96,7 +96,7 @@ class ArakurPLC(ModbusClient):
             response = self.write_registers(direccion, [carga_aireada, aireacion, sedimentacion, descarga])
             return response.function_code < ERROR_CODE
 
-        return false
+        return False
 
     def cambiar_programa(self, valor):
         return self._escribir_registro(ACTUAL_PROGRAM, valor)
