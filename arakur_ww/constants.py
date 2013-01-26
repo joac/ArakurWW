@@ -58,12 +58,23 @@ niveles = {
         'cloudiness' : 2,
         'volumen_tratado' : 3,
         'volumen_tratado_parcial' : 4,
-        'oxigen_min' : OXIGEN_MIN,
-        'oxigen_max' : OXIGEN_MAX,
-        'cloudiness_max' : CLOUDINESS_MAX,
-        'programa_actual' : ACTUAL_PROGRAM,
         'carga_aireada' : 21,
         'aireacion' : 22,
         'sedimentacion' : 23,
         'descarga' : 24,
     }
+
+parametros = {
+        'oxigen_min' : OXIGEN_MIN,
+        'oxigen_max' : OXIGEN_MAX,
+        'cloudiness_max' : CLOUDINESS_MAX,
+        'programa_actual' : ACTUAL_PROGRAM,
+        }
+
+#define los formatters validos para los tipos de datos del plc
+formatters = {
+        'oxigen_min' : 0.01,
+        'oxigen_max' : 0.01,
+        'oxigen': 0.01,
+        }
+

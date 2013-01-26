@@ -32,6 +32,7 @@ class ArakurPLC(ModbusClient):
         self._procesar_eventos(state, marcas)
         self._procesar_valores_instantaneos(state, registros)
         self._procesar_programas(state, registros)
+        self._procesar_parametros(state, registros)
         #faltaria timestamp para la informacion
         #guardamos las marcas viejas, para poder ver si cambiaron
         self.prev_marcas = marcas
@@ -58,7 +59,19 @@ class ArakurPLC(ModbusClient):
     def _procesar_valores_instantaneos(self, state, registros):
         state['instant_values'] = {}
         for element, registro in niveles.iteritems():
-            state['instant_values'][element] = registros[registro]
+            value = registros[registro]
+            if formatters.has_key(element):
+                value *= formatters[element]
+
+            state['instant_values'][element] = value
+
+    def _procesar_parametros(self, state, registros):
+        state['params'] = {}
+        for element, registro in parametros.iteritems():
+            value = registros[registro]
+            if formatters.has_key(element):
+                value *= formatters[element]
+            state['params'][element] = value
 
     def _procesar_programas(self, state, registros):
         state['programs'] = []
@@ -101,7 +114,7 @@ class ArakurPLC(ModbusClient):
     def cambiar_programa(self, valor):
         return self._escribir_registro(ACTUAL_PROGRAM, valor)
 
-    def actualizar_niveles(self, min_oxigeno, max_oxigeno, max_turbiedad):
+    def actualizar_parametros(self, min_oxigeno, max_oxigeno, max_turbiedad):
         response = self.write_registers(OXIGEN_MIN, [min_oxigeno, max_oxigeno, max_turbiedad])
         return response.function_code < ERROR_CODE
 

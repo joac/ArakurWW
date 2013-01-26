@@ -30,7 +30,7 @@ class DataAdquisitor(threading.Thread):
             #TODO actualizar solo si hay novedades
             for n, programa in enumerate(state['programs'], 1):
                 broker.hmset('programa_%s' % n, programa)
-
+            broker.hmset('params', state['params'])
             broker.publish('plc_state', json.dumps(state))
             time.sleep(0.5)
 

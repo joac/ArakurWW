@@ -1,5 +1,6 @@
 #! -*- coding: utf8 -*-
-from flask.ext.wtf import Form, TextField, PasswordField, validators, HiddenField, IntegerField
+from flask.ext.wtf import Form, TextField, PasswordField, validators, \
+        HiddenField, IntegerField, DecimalField
 
 
 class LoginForm(Form):
@@ -40,4 +41,20 @@ class ProgramForm(Form):
         ])
 
 
+class ParametersForm(Form):
+    oxigen_min = DecimalField(u'Oxígeno Mínimo', [
+        validators.Required("Campo obligatorio"),
+        validators.NumberRange(1, 99.99, "El valor debe estar entre %(min)s y %(max)s"),
+
+        ])
+    oxigen_max = DecimalField(u'Oxígeno Máximo', [
+        validators.Required("Campo obligatorio"),
+        validators.NumberRange(0, 99.99, "El valor debe estar entre %(min)s y %(max)s"),
+
+        ])
+    cloudiness_max = IntegerField(u'Turbiedad Máxima', [
+        validators.Required("Campo obligatorio"),
+        validators.NumberRange(1, 9999, "El valor debe estar entre %(min)s y %(max)s"),
+
+        ])
 

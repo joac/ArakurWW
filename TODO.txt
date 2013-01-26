@@ -1,0 +1,22 @@
+TODO
+====
+
+[_] Add Logging to daemon
+[_] Add button to stop cycle
+[x] Add button to start cycle
+[x] Add bars for cycle times
+[x] Display program number on dashboard
+[_] Require admin for edit programms and cycle management
+[x] Cancel button on program edit dialog (Show nav bar, instead cancel button)
+[_] View to edit level, oxigen and cloudiness limits
+[_] Color managment of progress bars
+[_] Confirm Dialog on stop and start buttons 
+[_] Create user roles
+[_] Timestamp state (alarms, events)
+[_] Put alarms and events in stak order
+[_] Automate aplication start (cron job on power on)
+[_] Timestamp data log
+[_] Log instant data to mysql db
+[_] Write javascript code to get graph data
+[_] Graph Pagination ? Tho calendar fields whit max aperture of two years? Button for "today" "this week" "this month" 
+[_] CSV data exporter for selected month.

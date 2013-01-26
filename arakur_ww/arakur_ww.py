@@ -7,7 +7,7 @@ from utils import RemoteCommand
 from flask import Flask, url_for, render_template, Response, json, jsonify, redirect, request, flash
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.login import LoginManager, login_required, login_user, logout_user
-from forms import LoginForm, ProgramForm
+from forms import LoginForm, ProgramForm, ParametersForm
 from models import User
 
 DEBUG = True
@@ -145,6 +145,35 @@ def actualizar_programa(programa):
             field.data = value
 
     return render_template('programa.html', form=form, programa=programa)
+
+@app.route('/parametros', methods=['GET', 'POST'])
+@login_required
+def actualizar_parametros():
+
+    form = ParametersForm()
+    if form.validate_on_submit():
+        ret = enviar_comando('actualizar_parametros',
+                    int(form.oxigen_min.data * 100),
+                    int(form.oxigen_max.data * 100),
+                    form.cloudiness_max.data,
+                );
+        if ret:
+            flash(u'Parametros actualizados!', 'success')
+        else:
+            flash(u'Ocurrió un error al actualizar los parametros', 'error')
+        return redirect(url_for('admin'))
+    else:
+        params = broker.hgetall('params')
+        for key, value in params.iteritems():
+            field = getattr(form, key, None)
+            if field is not None:
+                print field.type
+                if field.type == "DecimalField":
+                    field.data = float(value)
+                else:
+                    field.data = value
+
+    return render_template('parametros.html', form=form)
 
 
 #Debug methods, para poder escribir registro y marcas aleatorias del plc
