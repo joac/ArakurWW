@@ -6,8 +6,11 @@ Jinja2==2.6
 Twisted==12.3.0
 WTForms==1.0.2
 Werkzeug==0.8.3
+flask-peewee==0.6.3
+peewee==2.0.7
 pymodbus==1.1.0
 pyserial==2.6
 redis==2.7.2
 wsgiref==0.1.2
+wtf-peewee==0.2.0
 zope.interface==4.0.3
