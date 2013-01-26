@@ -115,5 +115,5 @@ class ArakurPLC(ModbusClient):
 
     def iniciar_programa(self, programa):
         self.cambiar_programa(programa)
-        self.iniciar_sbr()
+        return self.iniciar_sbr()
 

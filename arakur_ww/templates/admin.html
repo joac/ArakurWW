@@ -30,6 +30,8 @@
           <dd>{{programas[n]['descarga']}} Minutos</dd>
           <a href="{{url_for('actualizar_programa', programa=n)}}"
             class='btn btn-primary'>Editar</a>
+          <a href="{{url_for('iniciar_programa', programa=n)}}"
+            class='btn btn-primary'>Iniciar</a>
       </dl>
     </div> 
   {% endfor %}

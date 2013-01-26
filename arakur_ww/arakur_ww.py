@@ -58,6 +58,7 @@ def enviar_comando(function_name, *args, **kwargs):
 
     command = RemoteCommand(function_name, *args, **kwargs)
     receptor = broker.publish('commands', command.serialize())
+    print receptor
 
     if receptor:
         for message in stream.listen():
@@ -106,8 +107,13 @@ def admin():
 @login_required
 def iniciar_programa(programa):
     if utils.programa_valido(programa):
-        enviar_comando('iniciar_programa', programa)
-    return "enviado!"
+        ret = enviar_comando('iniciar_programa', programa)
+        if ret:
+            flash(u'Programa Nº%d Iniciado!' % programa, 'success')
+        else:
+            flash(u'Ocurrió un error al iniciar el programa nº%d' % programa, 'error')
+
+    return redirect(url_for('admin'))
 
 @app.route('/programa/<int:programa>', methods=['GET', 'POST'])
 @login_required
@@ -115,7 +121,7 @@ def actualizar_programa(programa):
 
     if not utils.programa_valido(programa):
         flash(u"El numero de programa %d es invalido" % programa, 'error')
-        redirect(url_for('admin'))
+        return redirect(url_for('admin'))
 
     form = ProgramForm()
     if form.validate_on_submit():
