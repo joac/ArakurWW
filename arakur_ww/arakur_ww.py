@@ -104,6 +104,29 @@ def admin():
 
     return render_template('admin.html', programas=programas, params=params)
 
+@app.route('/alarma/stop')
+@login_required
+def detener_alarma():
+    enviar_comando('detener_alarma')
+    return 'Enviado!!'
+
+@app.route('/sbr/stop')
+@login_required
+def detener_sbr():
+    ret = enviar_comando('detener_sbr')
+    if ret:
+        flash(u'SBR Detenido!' % programa, 'success')
+    else:
+        flash(u'Ocurrió un error al detener el SBR', 'error')
+
+    return redirect(url_for('admin'))
+
+@app.route('/acumulado/reset')
+@login_required
+def reset_acumulado():
+    enviar_comando('reset_acumulado')
+    return 'Enviado!!'
+
 @app.route('/iniciar/<int:programa>')
 @login_required
 def iniciar_programa(programa):

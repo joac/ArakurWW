@@ -95,7 +95,8 @@
         <dt> Parcial </dt>
         <dd id='volumen_tratado_parcial'></dd>
       </dl>
-      <input type="button" class="btn btn-primary btn-block" value="Reset Parcial"/>
+      <input type="button" class="btn btn-primary btn-block" value="Reset Parcial" 
+      onclick="$.get('{{url_for("reset_acumulado")}}')"/>
     </div>
     <div class="span3">
       <h4> Programa </h4>
@@ -149,7 +150,7 @@
   <div class="row">
     <div class="span6">
       <h4> Alarmas </h4>
-      <input type="button" class="btn btn-primary btn-block" value="Detener alarma acustica"/>
+      <input type="button" class="btn btn-primary btn-block" value="Detener alarma acustica" onclick="$.get('{{url_for("detener_alarma")}}')"/>
       <div id='alert_container'>
       </div>
     </div>
