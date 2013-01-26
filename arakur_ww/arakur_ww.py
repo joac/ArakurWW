@@ -58,7 +58,6 @@ def enviar_comando(function_name, *args, **kwargs):
 
     command = RemoteCommand(function_name, *args, **kwargs)
     receptor = broker.publish('commands', command.serialize())
-    print receptor
 
     if receptor:
         for message in stream.listen():
@@ -96,12 +95,14 @@ def stream():
 
 @app.route('/admin')
 def admin():
+
     programas = {}
     for n in utils.programas_validos():
         key = "programa_%d" % n
         programas[n] = broker.hgetall(key)
+    params = broker.hgetall('params')
 
-    return render_template('admin.html', programas=programas)
+    return render_template('admin.html', programas=programas, params=params)
 
 @app.route('/iniciar/<int:programa>')
 @login_required

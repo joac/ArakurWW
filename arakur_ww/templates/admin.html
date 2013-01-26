@@ -17,7 +17,7 @@
 
 <div class="row">
   {% for n in [1, 2, 3] %}
-    <div class="span4">
+    <div class="span3">
       <h4> Programa {{n}} </h4>
       <dl>
           <dt>Carga aireada:</dt>
@@ -34,7 +34,18 @@
             class='btn btn-primary'>Iniciar</a>
       </dl>
     </div> 
-  {% endfor %}
+    {% endfor %}
+    <div class="span3">
+      <h4> Parametros </h4>
+      <dl>
+        <dt>Oxigeno Mínimo</dt>
+        <dd>{{params['oxigen_min']}} mg/L<dd>
+        <dt>Oxigeno Máximo</dt>
+        <dd>{{params['oxigen_max']}} mg/L<dd>
+        <dt>Turbiedad Máxima</dt>
+        <dd>{{params['cloudiness_max']}} NTU<dd>
+      </dl>
+    </div>
 </div>
 
 {% endblock %}
