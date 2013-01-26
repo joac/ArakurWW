@@ -7,9 +7,25 @@
     first_load = true;  
 
     function update(state){
-        update_bar("turbiedad", state.instant_values.cloudiness, "NTU");   
+        //Instrumentos
+        var actual_program = state.programs[state.instant_values.programa_actual - 1];
+
+        update_bar("turbiedad", state.instant_values.cloudiness, "NTU"); 
         update_bar("nivel", state.instant_values.level, "%");   
         update_bar("oxigeno", state.instant_values.oxigen, "mg/Litro");
+        //Volumenes
+        update_tag("volumen_tratado", state.instant_values.volumen_tratado, 'm³');
+        update_tag("volumen_tratado_parcial", state.instant_values.volumen_tratado, 'm³');
+        //Progreso
+        update_tag("programa_actual", state.instant_values.programa_actual);
+        var process_times = ['carga_aireada', 'sedimentacion', 'descarga', 'aireacion'];
+    
+        for(var n=0; n<process_times.length; n++){
+            var tag = process_times[n];
+            update_tag("programa_" + tag, actual_program[tag], 'minutos');
+            update_bar(tag, state.instant_values[tag], 'minutos', actual_program[tag]);
+        }; 
+
         if (first_load){
             for(var i = 0; i < state.alarms.length; i++){
                 set_alert(state.alarms[i]);                
@@ -47,26 +63,26 @@
   </ul>
   
   <div class="row">
-    <div class="span6">
-      <h4> Valores Actuales </h4>
+    <div class="span3">
+      <h4> Instrumentos </h4>
       <dl>
         <dt>Nivel en SBR</dt>
         <dd>
         <div class="progress progress-info progress-striped">
-          <div id="nivel" class="bar" style="width: 20%">20%</div>
+          <div id="nivel" class="bar" style="width: 0%">0%</div>
         </div>
         </dd>
 
         <dt> Oxígeno </dt>
         <dd>
         <div class="progress progress-info progress-striped">
-          <div id="oxigeno" class="bar" style="width: 20%"> 27 mg/Litro</div>
+          <div id="oxigeno" class="bar" style="width: 0%"> 0 mg/Litro</div>
         </div> 
         </dd> 
         <dt> Turbiedad </dt>
         <dd>
         <div class="progress progress-info progress-striped">
-          <div id="turbiedad" class="bar" style="width: 20%">42 NTU</div>
+          <div id="turbiedad" class="bar" style="width: 0%">0 NTU</div>
         </div>
         </dd> 
       </dl>
@@ -75,23 +91,58 @@
       <h4> Volumen Acumulado </h4>
       <dl>
         <dt> Total</dt>
-        <dd>50 m3</dd>
+        <dd id='volumen_tratado'></dd>
         <dt> Parcial </dt>
-        <dd>22 m3</dd>
+        <dd id='volumen_tratado_parcial'></dd>
       </dl>
       <input type="button" class="btn btn-primary btn-block" value="Reset Parcial"/>
     </div>
     <div class="span3">
-        <h4> Progreso </h4>
-        <dl>
+      <h4> Programa </h4>
+      <dl>
+        <dt> Número </dt>
+        <dd id='programa_actual'></dd> 
         <dt> Carga Aireada </dt>
-        <dd id="tiempo_carga_aireada">50 minutos</dd>
+        <dd id="programa_carga_aireada"></dd> 
         <dt> Aireación </dt>
-        <dd id="tiempo_aireacion">50 minutos</dd>
+        <dd id="programa_aireacion"></dd>
         <dt> Sedimentación </dt>
-        <dd id="tiempo_sedimentacion">50 minutos</dd>
+        <dd id="programa_sedimentacion"></dd>
         <dt> Descarga </dt>
-        <dd id="tiempo_descarga">50 minutos</dd>
+        <dd id="programa_descarga"> </dd>
+      </dl>
+    </div>
+    <div class="span3">
+      <h4> Progreso </h4>
+      <dl>
+        <dt> Carga Aireada </dt>
+        <dd>
+        <div id="programa_carga_aireada" class="centered"></div>
+        <div class="progress progress-info progress-striped">
+          <div id="carga_aireada" class="bar" style="width: 0%">0 minutos</div>
+        </div>
+        </dd> 
+        <dt> Aireación </dt>
+        <dd>
+        <div id="programa_aireacion" class="centered"></div>
+        <div class="progress progress-info progress-striped">
+          <div id="aireacion" class="bar" style="width: 0%">0 minutos</div>
+        </div>
+        </dd>
+        <dt> Sedimentación </dt>
+        <dd>
+        <div id="programa_sedimentacion" class="centered"></div>
+        <div class="progress progress-info progress-striped">
+          <div id="sedimentacion" class="bar" style="width: 0%">0 minutos</div>
+        </div>
+        </dd>
+        <dt> Descarga </dt>
+        <dd>
+        <div id="programa_descarga" class='centered'></div>
+        <div class="progress progress-info progress-striped">
+          <div id="descarga" class="bar" style="width: 0%">0 minutos</div>
+        </div>
+        </dd>
       </dl>
     </div>
   </div>

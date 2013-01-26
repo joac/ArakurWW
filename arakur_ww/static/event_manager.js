@@ -12,12 +12,18 @@ function state_handler(custom_function){
     };
   };
 };
+function update_tag(name, value, postfix){
+    var postfix = postfix || '';
+    $("#" + name).text(value + " " + postfix);
+};
 /**
  * Actualiza una barra de progreso de bootstrap
  */
-function update_bar(name, value, postfix){
-    $("#" + name).css('width', value +"%");
-    $("#" + name).text(value + " " + postfix);
+function update_bar(name, value, postfix, max){
+    var max = max || 100;
+    var percent = (value / max ) * 100;
+    $("#" + name).css('width', percent +"%");
+    update_tag(name, value, postfix);
 };
 
 function _crear_div_alarma(text, time){
