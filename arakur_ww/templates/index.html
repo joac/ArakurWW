@@ -8,7 +8,7 @@
 
     function update(state){
         //Instrumentos
-        var actual_program = state.programs[state.instant_values.programa_actual - 1];
+        var actual_program = state.programs[state.params.programa_actual - 1];
 
         update_bar("turbiedad", state.instant_values.cloudiness, "NTU"); 
         update_bar("nivel", state.instant_values.level, "%");   
@@ -17,7 +17,7 @@
         update_tag("volumen_tratado", state.instant_values.volumen_tratado, 'm³');
         update_tag("volumen_tratado_parcial", state.instant_values.volumen_tratado, 'm³');
         //Progreso
-        update_tag("programa_actual", state.instant_values.programa_actual);
+        update_tag("programa_actual", state.params.programa_actual);
         var process_times = ['carga_aireada', 'sedimentacion', 'descarga', 'aireacion'];
     
         for(var n=0; n<process_times.length; n++){
