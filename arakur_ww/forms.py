@@ -49,12 +49,12 @@ class ParametersForm(Form):
         ])
     oxigen_max = DecimalField(u'Oxígeno Máximo', [
         validators.Required("Campo obligatorio"),
-        validators.NumberRange(0, 99.99, "El valor debe estar entre %(min)s y %(max)s"),
+        validators.NumberRange(1, 99.99, "El valor debe estar entre %(min)s y %(max)s"),
 
         ])
-    cloudiness_max = IntegerField(u'Turbiedad Máxima', [
+    cloudiness_max = DecimalField(u'Turbiedad Máxima', [
         validators.Required("Campo obligatorio"),
-        validators.NumberRange(1, 9999, "El valor debe estar entre %(min)s y %(max)s"),
+        validators.NumberRange(1, 99.99, "El valor debe estar entre %(min)s y %(max)s"),
 
         ])
 

@@ -76,5 +76,7 @@ formatters = {
         'oxigen_min' : 0.01,
         'oxigen_max' : 0.01,
         'oxigen': 0.01,
+        'cloudiness' : 0.01,
+        'cloudiness_max' : 0.01,
         }
 

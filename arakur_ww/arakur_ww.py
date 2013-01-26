@@ -156,7 +156,7 @@ def actualizar_parametros():
         ret = enviar_comando('actualizar_parametros',
                     int(form.oxigen_min.data * 100),
                     int(form.oxigen_max.data * 100),
-                    form.cloudiness_max.data,
+                    int(form.cloudiness_max.data * 100),
                 );
         if ret:
             flash(u'Parametros actualizados!', 'success')
