@@ -2,5 +2,21 @@
 {% import "bootstrap_wtf.html" as wtf %}
 
 {% block content %}
+  <ul class="nav nav-tabs">
+    <li> 
+    <a href='/index'>Dashboard</a>
+    </li>
+
+    <li> 
+    <a href='/graficos'>Graficos</a>
+    </li>
+
+    <li> 
+    <a href='/admin'>Admin</a>
+    </li>
+    <li class='active'> 
+    <a href='/index'>Programa</a>
+    </li>
+  </ul>
 {{ wtf.quick_form(form, action=url_for('actualizar_programa', programa=programa), buttons=[('submit', 'primary', 'Guardar')]) }}
 {% endblock %}

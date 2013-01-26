@@ -6,6 +6,12 @@ from utils import RemoteCommand
 from config import PLC, REDIS
 from plc_interface import ArakurPLC
 import threading
+import logging
+
+logging.basicConfig()
+log = logging.getLogger()
+log.setLevel(logging.INFO)
+
 
 plc = ArakurPLC(PLC['host'], port=PLC['port'])
 plc.connect()

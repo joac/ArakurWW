@@ -137,6 +137,13 @@ def actualizar_programa(programa):
         else:
             flash(u'Ocurrió un error al actualizar el programa nº%d' % programa, 'error')
         return redirect(url_for('admin'))
+    else:
+        key = "programa_%d" % programa
+        program_values = broker.hgetall(key)
+        for key, value in program_values.iteritems():
+            field = getattr(form, key)
+            field.data = value
+
     return render_template('programa.html', form=form, programa=programa)
 
 
