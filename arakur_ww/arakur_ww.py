@@ -115,7 +115,7 @@ def detener_alarma():
 def detener_sbr():
     ret = enviar_comando('detener_sbr')
     if ret:
-        flash(u'SBR Detenido!' % programa, 'success')
+        flash(u'SBR Detenido!', 'success')
     else:
         flash(u'Ocurrió un error al detener el SBR', 'error')
 

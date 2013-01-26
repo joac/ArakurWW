@@ -31,7 +31,8 @@
           <a href="{{url_for('actualizar_programa', programa=n)}}"
             class='btn btn-primary'>Editar</a>
           <a href="{{url_for('iniciar_programa', programa=n)}}"
-            class='btn btn-primary'>Iniciar</a>
+            onclick='return confirm("Esta seguro de iniciar el programa nº {{n}}");' 
+            class='btn btn-success'>Iniciar</a>
       </dl>
     </div> 
     {% endfor %}
@@ -49,5 +50,14 @@
      </dl>
     </div>
 </div>
+<div id="row">
+  <div id="span12">
+    <a href="{{url_for('detener_sbr')}}"
+      class='btn btn-danger btn-block'
+      onclick='return confirm("Esta seguro de que  quiere detener el sbr");'
+      >Detener SBR</a>
+  </div>
+</div>
+
 
 {% endblock %}
