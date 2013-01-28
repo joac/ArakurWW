@@ -10,9 +10,9 @@
         //Instrumentos
         var actual_program = state.programs[state.params.programa_actual - 1];
 
-        update_bar("turbiedad", state.instant_values.cloudiness, "NTU"); 
+        update_bar("turbiedad", state.instant_values.cloudiness, "NTU", state.params.cloudiness_max); 
         update_bar("nivel", state.instant_values.level, "%");   
-        update_bar("oxigeno", state.instant_values.oxigen, "mg/Litro");
+        update_bar("oxigeno", state.instant_values.oxigen, "mg/Litro", state.params.oxigen_max);
         //Volumenes
         update_tag("volumen_tratado", state.instant_values.volumen_tratado, 'm³');
         update_tag("volumen_tratado_parcial", state.instant_values.volumen_tratado, 'm³');
