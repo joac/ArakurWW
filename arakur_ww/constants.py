@@ -76,5 +76,6 @@ formatters = {
         'oxigen_min' : 0.01,
         'oxigen_max' : 0.01,
         'oxigen': 0.01,
+        'level' : 0.01,
         }
 
