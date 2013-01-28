@@ -1,3 +1,4 @@
+#! -*-coding: utf8-*-
 import time
 import json
 import redis
@@ -24,15 +25,20 @@ class DataAdquisitor(threading.Thread):
             #TODO logica para tratar de que el tiempo del ciclo sea constante
             #TODO guardar en la DB registros historicos
             #TODO agregar logging
+            try:
+                state = plc.obtener_estado()
+                logging.info("Obtenidos datos del PLC")
+                #guardamos en una key programa_<n> el hash del programa
+                for n, programa in enumerate(state['programs'], 1):
+                    broker.hmset('programa_%s' % n, programa)
 
-            state = plc.obtener_estado()
-            #guardamos en una key programa_<n> el hash del programa
-            #TODO actualizar solo si hay novedades
-            for n, programa in enumerate(state['programs'], 1):
-                broker.hmset('programa_%s' % n, programa)
-            broker.hmset('params', state['params'])
-            broker.publish('plc_state', json.dumps(state))
+                broker.hmset('params', state['params'])
+                broker.publish('plc_state', json.dumps(state))
+                logging.info("Estado publicado en canal 'plc_state'")
+            except:
+                logging.error("Ocurrió un error al obtener los datos desde el PLC")
             time.sleep(0.5)
+
 
 class CommandWatcher(threading.Thread):
     def run(self):
@@ -41,14 +47,19 @@ class CommandWatcher(threading.Thread):
         pubsub.subscribe('commands')
         for message in pubsub.listen():
             if message['type'] == 'message':
-                print message['data']
+                logging.info("Se recibió el mensaje de ejecución remota %s", message['data'])
                 command = RemoteCommand()
                 command.unserialize(message['data'])
-                success = command.execute(plc)
+                try:
+                    success = command.execute(plc)
+                except:
+                    success = False
+                    logging.error("No se pudo ejecutar la orden: '%s'", command.function_name)
+
                 response = {'id':command.id, 'success': success}
-                print response
                 time.sleep(0.6)
                 broker.publish('command-returns', json.dumps(response))
+                logging.info("enviada respuesta a comando: '%'", response)
 
 if __name__ == '__main__':
     da = DataAdquisitor()
