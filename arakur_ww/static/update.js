@@ -23,18 +23,22 @@ $(document).ready(function(){
 
         if (first_load){
             for(var i = 0; i < state.alarms.length; i++){
-                set_alert(state.alarms[i]);                
+                var alarm = state.alarms[i];
+                set_alert(alarm.text, alarm.time);                
                 };
             for(var i = 0; i < state.events.length; i++){
-                set_notify(state.events[i]);                
+                var evt = state.events[i];
+                set_notify(evt.text, evt.time);                
                 };
             first_load = false;
         } else {
             for(var i = 0; i < state.new_alarms.length; i++){
-                set_alert(state.new_alarms[i]);                
+                var alarm = state.new_alarms[i];
+                set_alert(alarm.text, alarm.time);                
             }; 
             for(var i = 0; i < state.new_events.length; i++){
-                set_notify(state.new_events[i]);                
+                var evt = state.new_events[i];
+                set_notify(evt.text, evt.time);                
             };
 }; 
     };

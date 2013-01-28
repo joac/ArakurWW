@@ -1,4 +1,5 @@
 #! -*-coding: utf8 -*-
+import datetime
 from pymodbus.client.sync import ModbusTcpClient as ModbusClient
 from constants import *
 
@@ -6,6 +7,7 @@ class ArakurPLC(ModbusClient):
     """Mantiene una interface de alto nivel con el PLC de operacion del SBR"""
     def __init__(self, *args, **kwargs):
         self.prev_marcas = [False] * MARK_COUNT
+        self.change_times = [False] * MARK_COUNT
         super(ArakurPLC, self).__init__(*args, **kwargs)
 
     def detener_alarma(self):
@@ -41,20 +43,34 @@ class ArakurPLC(ModbusClient):
     def _procesar_alarmas(self, state, marcas):
         state['alarms'] = []
         state['new_alarms'] = []
+        now_str = self._now_str()
+
         for alarma, registro in alarms.iteritems():
-            if marcas[registro]:
-                state['alarms'].append(alarma)
+
+            alarm_dict = {'text':alarma, 'time':self.change_times[registro]}
             if marcas[registro] and not self.prev_marcas[registro]:
-                state['new_alarms'].append(alarma)
+                alarm_dict['time'] = now_str
+                state['new_alarms'].append(alarm_dict)
+                state['alarms'].append(alarm_dict)
+                self.change_times[registro] = now_str;
+            elif marcas[registro]:
+                #donde guardamos
+                state['alarms'].append(alarm_dict)
 
     def _procesar_eventos(self, state, marcas):
         state['events'] = []
         state['new_events'] = []
+        now_str = self._now_str()
+
         for evt, registro in notificaciones.iteritems():
-            if marcas[registro]:
-                state['events'].append(evt)
+            event_dict = {'text':evt, 'time':self.change_times[registro]}
             if marcas[registro] and not self.prev_marcas[registro]:
-                state['new_events'].append(evt)
+                event_dict['time'] = now_str
+                state['events'].append(event_dict)
+                state['new_events'].append(event_dict)
+                self.change_times[registro] = now_str
+            elif marcas[registro]:
+                state['events'].append(event_dict)
 
     def _procesar_valores_instantaneos(self, state, registros):
         state['instant_values'] = {}
@@ -129,4 +145,5 @@ class ArakurPLC(ModbusClient):
     def iniciar_programa(self, programa):
         self.cambiar_programa(programa)
         return self.iniciar_sbr()
-
+    def _now_str(self):
+        return datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
