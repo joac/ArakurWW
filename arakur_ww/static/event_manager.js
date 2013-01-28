@@ -14,6 +14,9 @@ function state_handler(custom_function){
 };
 function update_tag(name, value, postfix){
     var postfix = postfix || '';
+    if (Math.round(value) !== value){
+      value = value.toFixed(2);
+    };
     $("#" + name).text(value + " " + postfix);
 };
 /**
@@ -22,8 +25,12 @@ function update_tag(name, value, postfix){
 function update_bar(name, value, postfix, max){
     var max = max || 100;
     var percent = (value / max ) * 100;
-    $("#" + name).css('width', percent +"%");
+    if (percent > 100){
+      percent = 100;
+    };
+    $("#" + name).css('width', percent + "%");
     update_tag(name, value, postfix);
+    update_tag(name + "_val", value, postfix);
 };
 
 function _crear_div_alarma(text, time){
