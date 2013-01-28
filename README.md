@@ -21,7 +21,39 @@ All adquired data is stored in a MySQL Database, the selected ORM is peewee, tha
  * cloudiness_log
 
 ## Data Adquisition Strategy
-To aquire data from PLC, we made a MODBUS/TCP client conection, and poll for data every second.
+To aquire data from PLC, we made a MODBUS/TCP client conection, and poll for data ever half second.
 In this step all data is pushed in json format througth a event-stream connection to brower, updating graphs and aplication info.
+
+## How to test application
+Yo need to have following packages installed:
  
+ * Python 2.6 or 2.7 (preferred) 
+ * Redis: http://redis.io
+ * Python distribute #FIXME ¿Is virtualenv there??
+
+### How to get this thing working
+
+ * Create a new virtualenv for application: virtualenv env
+ * Install requirements: pip install -r requirements.txt
+ * Start redis (if you not started it yet)
+ * Configure redis connection on arakur_ww/config.py
+ * Start PLC mock: python mock_planta/server.py
+ * Start adquisition daemon python arakur_ww/daemon.py 
+ * Start Web server python arakur_ww/arakur_ww.py
+ * Enter to http://localhost:5000 using a modern browser
+
+
+## FAQ
+
+### Where is the PLC program?
+Sorry, I only develop the HMI, but, if you write to the apropiate Modbus registers, (defined in arakur_ww/constants.py), everything have to work well
+
+
+### Why you have twisted, and serve the application with Flask?
+
+Is a design choice, Because flask is really confortable to work with, and really, web app and adquisition daemon are different services.
+
+### Why this FAQ?
+
+Because... you are reading It.
 
