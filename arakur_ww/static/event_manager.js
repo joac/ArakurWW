@@ -51,15 +51,15 @@ function _crear_div_alarma(text, time){
 };
 
 function set_alert(text, time){
-  var container = document.getElementById('alert_container');
+  var container = $('#alert_container');
   var div = _crear_div_alarma(text, time); 
-  container.appendChild(div);
+  container.prepend(div);
 };
 
 
 function set_notify(text, time){
-  var container = document.getElementById('event_container');
+  var container = $('#event_container');
   var div = _crear_div_alarma(text, time); 
   div.classList.add('alert-success');
-  container.appendChild(div);
+  container.prepend(div);
 };
