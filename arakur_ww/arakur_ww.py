@@ -201,17 +201,17 @@ def actualizar_parametros():
 
 #Debug methods, para poder escribir registro y marcas aleatorias del plc
 
-@app.route('/registro/<int:direccion>/<int:valor>/')
-def actualizar_registro(direccion, valor):
-    enviar_comando('_escribir_registro', direccion, valor)
-    return "enviado!"
-
-@app.route('/marca/<int:direccion>/<int:valor>/')
-def actualizar_marca(direccion, valor):
-    valor = valor > 0
-    enviar_comando('_escribir_marca', direccion, valor)
-    return "enviado!"
-
 if __name__ == '__main__':
+
+    @app.route('/registro/<int:direccion>/<int:valor>/')
+    def actualizar_registro(direccion, valor):
+        enviar_comando('_escribir_registro', direccion, valor)
+        return "enviado!"
+
+    @app.route('/marca/<int:direccion>/<int:valor>/')
+    def actualizar_marca(direccion, valor):
+        valor = valor > 0
+        enviar_comando('_escribir_marca', direccion, valor)
+        return "enviado!"
 
     app.run(debug=True, threaded=True, host='0.0.0.0')
