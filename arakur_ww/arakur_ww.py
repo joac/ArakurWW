@@ -10,7 +10,6 @@ from flask.ext.login import LoginManager, login_required, login_user, logout_use
 from forms import LoginForm, ProgramForm, ParametersForm
 from models import User
 
-DEBUG = True
 SECRET_KEY = 'development key'
 BOOTSTRAP_JQUERY_VERSION = None
 
@@ -215,4 +214,4 @@ def actualizar_marca(direccion, valor):
 
 if __name__ == '__main__':
 
-    app.run(threaded=True, host='0.0.0.0')
+    app.run(debug=True, threaded=True, host='0.0.0.0')

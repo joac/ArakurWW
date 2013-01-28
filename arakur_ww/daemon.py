@@ -61,7 +61,8 @@ class CommandWatcher(threading.Thread):
                 broker.publish('command-returns', json.dumps(response))
                 logging.info("enviada respuesta a comando: '%'", response)
 
-if __name__ == '__main__':
+
+def run():
     da = DataAdquisitor()
     da.daemon = True
     da.start()
@@ -71,3 +72,7 @@ if __name__ == '__main__':
 
     while threading.active_count() > 0:
         time.sleep(0.1)
+
+
+if __name__ == '__main__':
+    run()
