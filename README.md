@@ -43,6 +43,18 @@ Yo need to have following packages installed:
  * Enter to http://localhost:5000 using a modern browser
 
 
+## Production deploy
+
+Target linux is Ubuntu 12.10
+
+ * Install dependencies 
+ * Create a new user "hmi"
+ * Clone repository inside home directory of this user
+ * Add execution rights to web.py and adquisitor.py (chmod +x)
+ * Copy upstart jobs from upstart_jobs to /etc/init
+ * Start jobs, manually: start sbr_daemon, start sbr_web
+   
+ 
 ## FAQ
 
 ### Where is the PLC program?
