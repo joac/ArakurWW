@@ -10,7 +10,7 @@ $(document).ready(function(){
         update_bar("oxigeno", state.instant_values.oxigen, "mg/Litro", 20);
         //Volumenes
         update_tag("volumen_tratado", state.instant_values.volumen_tratado, 'm³');
-        update_tag("volumen_tratado_parcial", state.instant_values.volumen_tratado, 'm³');
+        update_tag("volumen_tratado_parcial", state.instant_values.volumen_tratado_parcial, 'm³');
         //Progreso
         update_tag("programa_actual", state.params.programa_actual);
         var process_times = ['carga_aireada', 'sedimentacion', 'descarga', 'aireacion'];

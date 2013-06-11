@@ -1,6 +1,7 @@
 PLC = {
-        'host' : 'localhost',
-        'port' : 5020,
+        #'host' : 'localhost',
+        'host' : '192.168.1.33',
+        'port' : 502,
     }
 REDIS ={
         'host' : 'localhost',
